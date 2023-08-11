@@ -6,8 +6,13 @@
       integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/default.min.css">-->
 <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>-->
-<link rel="stylesheet" href="css/main.css">
 <!--<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/default.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+
+<!-- and it's easy to individually load additional languages -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/python.min.js"></script>
+<link rel="stylesheet" href="css/main.css">
 <head>
 
     <meta charset="UTF-8">
@@ -32,9 +37,9 @@
             Почему особых? Потому что общепринятой практикой считается хранение даты-времени в БД с нулевым смещением,
             те по
             UTC.
-            Подразумевается, например, что значение <code> 2023-07-11 05:07:03 равно 2023-07-11 05:07:03+00:00 и
+            Подразумевается, например, что значение <span class="dedic"> 2023-07-11 05:07:03 равно 2023-07-11 05:07:03+00:00 и
             2023-07-11
-            05:07:03Z.</code></p>
+            05:07:03Z.</span></p>
 
         <p class="text-indent-3 mt-4">Сейчас у нас есть следующие кейсы исп-я полей типа datetime:
         </p>
@@ -58,12 +63,14 @@
         <h6 class="text-indent-1 mt-4">Дано:</h6>
         <ul>
             <li>данные полей datetime записаны в БД по Уральскому времени (+5:00 UTC) без указания ТЗ</li>
-            <li>ORM транслирует в запросы переданное время с поправкой на ТЗ, те например <code>2023-07-11
-                05:07:03+03:00 станет 2023-07-11 02:07:03, а 2023-07-11 05:07:03-03:00 станет 2023-07-11 08:07:03</code>
+            <li>ORM транслирует в запросы переданное время с поправкой на ТЗ, те например <span class="dedic">2023-07-11
+                05:07:03+03:00 станет 2023-07-11 02:07:03, а 2023-07-11 05:07:03-03:00 станет 2023-07-11 08:07:03</span>
             </li>
             <li>Текущая ТЗ АПИ: UTC</li>
             <li>ТЗ отдаваемых ORM полей datetime - Уральское время (+5:00 UTC)</li>
-            <li>время отдаваемое ORM не меняется, те как в БД записано, так в ответе на запрос и будет получено, но будет добавлена ТЗ UTC+5</li>
+            <li>время отдаваемое ORM не меняется, те как в БД записано, так в ответе на запрос и будет получено, но
+                будет добавлена ТЗ UTC+5
+            </li>
         </ul>
 
         <p class="text-indent-2 mt-4">
@@ -74,8 +81,9 @@
             здесь время будет получено с ТЗ и чтобы оно попало в запрос как есть, нужно заменить ТЗ на нулевую.
             Примерно так:
         </p>
-        <pre class="codeBlock">
-        dt.replace(tzinfo=timezone(offset=timedelta(hours=0))</pre>
+        <pre><code class="codeBlock python-hljs">
+            dt.replace(tzinfo=timezone(offset=timedelta(hours=0))
+        </code></pre>
         <p class="text-indent-2 mt-4">
             <i>Третий:</i>
             Здесь уже сложнее, вначале создадим ТЗ со сдвигом равным Уральскому времени (+5), затем получим текущее
@@ -86,9 +94,10 @@
 
             Примерно так:
         </p>
-        <pre class="codeBlock">
-        tz = timezone(offset=timedelta(hours=5))
-        dt = datetime.now(tz=tz).replace(tzinfo=timezone.utc)</pre>
+        <pre><code class="codeBlock python-hljs">
+            tz = timezone(offset=timedelta(hours=5))
+            dt = datetime.now(tz=tz).replace(tzinfo=timezone.utc)
+        </code></pre>
         <p class="text-indent-2 mt-4">
             <i>Четверый:</i>
             Клиент если это браузер, мобильное устройство или любое другое со
@@ -103,15 +112,17 @@
         <p class="text-indent-2 mt-4">
             В первом случае меняем как время, так и ТЗ, примерно так:
         </p>
-        <pre class="codeBlock">
-        tz = timezone(offset=timedelta(hours=5))
-        dt.astimezone(tz=tz)</pre>
+        <pre><code class="codeBlock python-hljs">
+            tz = timezone(offset=timedelta(hours=5))
+            dt.astimezone(tz=tz)
+        </code></pre>
         <p class="text-indent-2 mt-4">
             Во втором случае меняем ТЗ, примерно так:
         </p>
-        <pre class="codeBlock">
-        tz = timezone(offset=timedelta(hours=5))
-        dt.replace(tzinfo=tz)</pre>
+        <pre><code class="codeBlock python-hljs">
+            tz = timezone(offset=timedelta(hours=5))
+            dt.replace(tzinfo=tz)
+        </code></pre>
         <p class="text-indent-1"><u>И это еще на данный момент у нас нет перехода на летнее время.</u></p>
 
         <p class="text-indent-3 mt-4">В нашей текущей ситуацией с датой-временем нужно писать сильно больше кода, как
@@ -128,4 +139,5 @@
 </main>
 
 </body>
+<script>hljs.highlightAll();</script>
 </html>

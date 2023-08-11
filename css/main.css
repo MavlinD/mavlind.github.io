@@ -85,7 +85,7 @@ a {
     color: #9F2E3F;
 }
 
-code {
+.dedic {
     padding: 0.015rem .25rem;
     text-indent: 0;
     font-weight: bold;
@@ -117,14 +117,27 @@ code {
     display: block;
     padding: 9.5px;
     margin: 0 0 10px;
-    font-size: 1.1em;
+    font-size: 1.2em;
     line-height: 1.42857143;
     color: #151414;
     word-break: break-all;
     word-wrap: break-word;
-    background-color: #96add0;
+    background-color: #e0e7f1;
     border: 1px solid #ccc;
-    border-left: 5px solid #09f;
+    border-left: 6px solid #09f;
     border-radius: 4px;
     font-family: Consolas,Courier New,monospace;
+}
+
+pre{
+    /*white-space: pre-wrap;*/
+    /*white-space: nowrap;*/
+    /*white-space: unset;*/
+    /*white-space: pre-line;*/
+    /*white-space: break-spaces;*/
+    /*white-space: normal;*/
+}
+
+pre code.hljs{
+    padding: .25em;
 }
